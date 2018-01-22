@@ -28,7 +28,6 @@ public:
 std::vector<int> vecfd;
 pthread_mutex_t mutx;
 
-
 void* sendproc(void* param)
 {
     std::vector<slot*>& vecslot = *(std::vector<slot*>*)param;
@@ -61,7 +60,6 @@ void * acceptproc(void* param)
         {
             std::cout << "accept:" << clientfd << std::endl;
             slot* s = new slot(clientfd);
-            std::cout << s->fd << s->pBuff << std::endl;
 
             pthread_mutex_lock(&mutx);
             vecslot.push_back(s);
