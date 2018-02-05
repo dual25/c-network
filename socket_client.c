@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
+#include <unistd.h>
 
 int main(int argc, char* argv[])
 {
@@ -26,7 +27,25 @@ int main(int argc, char* argv[])
     }
 
     std::cout << "in" << std::endl;
+    while(1)
+    {
     char sendline[1024];
     fgets(sendline, 1024,stdin);
-    send(nfd, sendline, strlen(sendline), 0);
+    
+    struct timeval timeout={10, 0};
+    setsockopt(nfd, SOL_SOCKET, SO_SNDTIMEO, (char*)&timeout, sizeof(struct timeval));
+    int n = send(nfd, sendline, strlen(sendline), 0);
+    if(n <= 0)
+    {
+        std::cout << "cl" << std::endl;
+    }
+    }
+
+    char readline[1024];
+    while(1)
+    {
+        int n = read(nfd, readline, 1024);
+        break;
+    }
+    std::cout << readline << std::endl;
 }
