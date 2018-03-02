@@ -85,6 +85,11 @@ void onread(int sock, short event, void* arg)
     char* buffer = new char[1024];
     memset(buffer, 0, 1024);
     int size = recv(sock, buffer, 1024, 0);
+    if(size == 0)
+    {
+        close(sock);
+        return;
+    }
     std::cout << buffer << std::endl;
     
     //return;    

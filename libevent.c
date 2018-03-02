@@ -11,6 +11,13 @@ void onaccept(int sock, short event, void* arg);
 void onread(int sock, short event, void* arg);
 void onwrite(int sock, short event, void* arg);
 
+void test()
+{
+    int *p = NULL;
+    p[2] = 3;
+    p[100] = 10;
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -32,6 +39,7 @@ int main(int argc, char *argv[])
     event_add(&listen_ev, NULL);
     event_base_dispatch(base);
 
+    std::cout << "out" << std::endl;
     return 0;
 }
 
@@ -56,6 +64,15 @@ void onread(int sock, short event, void* arg)
     char* buffer = new char[1024];
     memset(buffer, 0, 1024);
     int size = recv(sock, buffer, 1024, 0);
+    if(size == 0)
+    {
+    struct event *ev = (struct event *)arg; 
+        event_del(ev);
+        std::cout << "read---------------" << std::endl;
+
+        return;
+    }
+
     std::cout << buffer << std::endl;
         
     write_ev = new struct event();
